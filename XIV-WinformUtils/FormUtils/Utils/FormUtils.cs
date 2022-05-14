@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace XIV.Utils
@@ -108,6 +110,39 @@ namespace XIV.Utils
             control.AllowDrop = true;
             controlOwner.Controls.Add(control);
             return (T)control;
+        }
+
+        /// <summary>
+        /// Gets all controls of type <typeparamref name="T"/> from <paramref name="form"/> 
+        /// and sets size of all with giving <paramref name="size"/>
+        /// </summary>
+        /// <typeparam name="T">Type of Control</typeparam>
+        /// <param name="size">New size of <typeparamref name="T"/></param>
+        /// <param name="form">Get controls from <paramref name="form"/></param>
+        public static void SetSizeOfType<T>(Size size, Form form) where T : Control
+        {
+            List<T> controls = GetControlsOfType<T>(form);
+            for (int i = 0; i < controls.Count; i++)
+            {
+                controls[i].Size = size;
+            }
+        }
+
+        /// <typeparam name="T">Type of Control</typeparam>
+        /// <param name="form">Get controls from <paramref name="form"/></param>
+        /// <returns>A List that contains of type <typeparamref name="T"/></returns>
+        public static List<T> GetControlsOfType<T>(Form form) where T : Control
+        {
+            List<T> controlList = new List<T>();
+            Type controlType = typeof(T);
+            for (int i = 0; i < form.Controls.Count; i++)
+            {
+                if (form.Controls[i].GetType() == controlType)
+                {
+                    controlList.Add((T)form.Controls[i]);
+                }
+            }
+            return controlList;
         }
 
     }
