@@ -103,15 +103,7 @@ namespace XIV.Utils
             return (T)Activator.CreateInstance(typeof(T));
         }
 
-        //TODO : Move somewhere else
-        public static T CreateDraggableControl<T>(Form controlOwner) where T : Control
-        {
-            Control control = Activator.CreateInstance<T>();
-            control.AllowDrop = true;
-            controlOwner.Controls.Add(control);
-            return (T)control;
-        }
-
+        //TODO : Add ability to exclude specified control instances or control types
         /// <summary>
         /// Gets all controls of type <typeparamref name="T"/> from <paramref name="form"/> 
         /// and sets size of all with giving <paramref name="size"/>
