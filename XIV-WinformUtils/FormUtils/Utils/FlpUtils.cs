@@ -55,7 +55,7 @@ namespace XIV.Utils
             }
         }
 
-        public static void FillWithObject<TButtonBase, T>(FlowLayoutPanel panel, IList<T> list)
+        public static void FillWithAnyList<T, TButtonBase>(FlowLayoutPanel panel, IList<T> list)
             where TButtonBase : ButtonBase
         {
             panel.Controls.Clear();
