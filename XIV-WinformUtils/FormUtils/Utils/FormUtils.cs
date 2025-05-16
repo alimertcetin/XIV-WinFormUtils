@@ -67,6 +67,20 @@ namespace XIV.Utils
             return false;
         }
 
+        public static bool GetForms<T>(out IList<T> forms) where T : Form
+        {
+            Type type = typeof(T);
+            forms = new List<T>();
+            foreach (Form item in Application.OpenForms)
+            {
+                if (item.GetType() == type)
+                {
+                    forms.Add((T)item);
+                }
+            }
+            return forms.Count > 0;
+        }
+
         /// <summary>
         /// If form is open returns form, else returns new form of type <typeparamref name="T"/>
         /// </summary>
