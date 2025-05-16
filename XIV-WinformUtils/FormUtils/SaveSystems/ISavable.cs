@@ -1,6 +1,6 @@
 ﻿namespace XIV.SaveSystems
 {
-    public interface ISaveable
+    public interface ISavable
     {
         object GetSaveData();
         void Load(object loadedData);
