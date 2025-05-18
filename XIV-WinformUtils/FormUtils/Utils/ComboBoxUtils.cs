@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace XIV.Utils
@@ -36,6 +37,19 @@ namespace XIV.Utils
         /// <param name="comboBox"><see cref="ComboBox"/> to refresh</param>
         /// <param name="itemList">Values for filling the <paramref name="comboBox"/></param>
         public static void RefreshComboBox(ComboBox comboBox, IList itemList)
+        {
+            comboBox.Items.Clear();
+            foreach (var item in itemList)
+            {
+                comboBox.Items.Add(item);
+            }
+            if (comboBox.SelectedIndex == -1 && comboBox.Items.Count > 0)
+            {
+                comboBox.SelectedIndex = 0;
+            }
+        }
+
+        public static void RefreshComboBox<T>(ComboBox comboBox, IList<T> itemList)
         {
             comboBox.Items.Clear();
             foreach (var item in itemList)
