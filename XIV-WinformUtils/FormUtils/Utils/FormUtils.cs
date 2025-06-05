@@ -135,17 +135,17 @@ namespace XIV.Utils
         }
 
         /// <typeparam name="T">Type of Control</typeparam>
-        /// <param name="form">Get controls from <paramref name="form"/></param>
+        /// <param name="container">Get controls from <paramref name="container"/></param>
         /// <returns>A List that contains of type <typeparamref name="T"/></returns>
-        public static List<T> GetControlsOfType<T>(Form form) where T : Control
+        public static List<T> GetControlsOfType<T>(Control container) where T : Control
         {
             List<T> controlList = new List<T>();
             Type controlType = typeof(T);
-            for (int i = 0; i < form.Controls.Count; i++)
+            for (int i = 0; i < container.Controls.Count; i++)
             {
-                if (form.Controls[i].GetType() == controlType)
+                if (container.Controls[i].GetType() == controlType)
                 {
-                    controlList.Add((T)form.Controls[i]);
+                    controlList.Add((T)container.Controls[i]);
                 }
             }
             return controlList;
