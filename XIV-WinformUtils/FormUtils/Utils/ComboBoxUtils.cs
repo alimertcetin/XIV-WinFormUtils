@@ -17,18 +17,15 @@ namespace XIV.Utils
         /// </summary>
         /// <typeparam name="T">The enum to get values</typeparam>
         /// <param name="comboBox"><see cref="ComboBox"/> to fill</param>
-        public static void FillComboBox_WithEnum<T>(ComboBox comboBox) where T : Enum
+        public static void FillComboBox_WithEnum<T>(ComboBox cmb) where T : Enum
         {
-            comboBox.Items.Clear();
+            cmb.Items.Clear();
             Array values = EnumUtils.GetValues<T>();
             foreach (object item in values)
             {
-                comboBox.Items.Add(item.ToString());
+                cmb.Items.Add(item.ToString());
             }
-            if (comboBox.SelectedIndex == -1 && comboBox.Items.Count > 0)
-            {
-                comboBox.SelectedIndex = 0;
-            }
+            if (cmb.Items.Count > 0) cmb.SelectedIndex = 0;
         }
 
         /// <summary>
@@ -36,30 +33,98 @@ namespace XIV.Utils
         /// </summary>
         /// <param name="comboBox"><see cref="ComboBox"/> to refresh</param>
         /// <param name="itemList">Values for filling the <paramref name="comboBox"/></param>
-        public static void RefreshComboBox(ComboBox comboBox, IList itemList)
+        public static void RefreshComboBox(ComboBox cmb, IList itemList)
         {
-            comboBox.Items.Clear();
+            cmb.Items.Clear();
             foreach (var item in itemList)
             {
-                comboBox.Items.Add(item);
+                cmb.Items.Add(item);
             }
-            if (comboBox.SelectedIndex == -1 && comboBox.Items.Count > 0)
-            {
-                comboBox.SelectedIndex = 0;
-            }
+            if (cmb.Items.Count > 0) cmb.SelectedIndex = 0;
         }
 
-        public static void RefreshComboBox<T>(ComboBox comboBox, IList<T> itemList)
+        public static void RefreshComboBox<T>(ComboBox cmb, IList<T> itemList)
         {
-            comboBox.Items.Clear();
+            cmb.Items.Clear();
             foreach (var item in itemList)
             {
-                comboBox.Items.Add(item);
+                cmb.Items.Add(item);
             }
-            if (comboBox.SelectedIndex == -1 && comboBox.Items.Count > 0)
+            if (cmb.Items.Count > 0) cmb.SelectedIndex = 0;
+        }
+
+        public static void BindData<T>(ComboBox cmb, IEnumerable<T> enumerable, Func<T, string> bindFunc)
+        {
+            cmb.Items.Clear();
+
+            foreach (var item in enumerable)
             {
-                comboBox.SelectedIndex = 0;
+                cmb.Items.Add(bindFunc(item));
             }
+
+            if (cmb.Items.Count > 0) cmb.SelectedIndex = 0;
+        }
+
+        public static void BindIf<T>(ComboBox cmb, IEnumerable<T> enumerable, Func<T, bool> ifFunc, Func<T, string> bindFunc)
+        {
+            cmb.Items.Clear();
+
+            foreach (var item in enumerable)
+            {
+                if (ifFunc(item)) cmb.Items.Add(bindFunc(item));
+            }
+
+            if (cmb.Items.Count > 0) cmb.SelectedIndex = 0;
+        }
+
+        public static void SetSelectedIndex<T>(ComboBox cmb, T value, Func<T, string> bindFunc)
+        {
+            if (cmb.Items.Count == 0) return;
+            for (int i = 0; i < cmb.Items.Count; i++)
+            {
+                if (cmb.Items[i].ToString() == bindFunc(value))
+                {
+                    cmb.SelectedIndex = i;
+                    return;
+                }
+            }
+            cmb.SelectedIndex = -1; // Not found
+        }
+    }
+
+    public static class ComboBoxExtensions
+    {
+        public static void BindData<T>(this ComboBox cmb, IEnumerable<T> enumerable, Func<T, string> bindFunc)
+        {
+            ComboBoxUtils.BindData(cmb, enumerable, bindFunc);
+        }
+
+        public static void BindEnum<T>(this ComboBox cmb) where T : Enum
+        {
+            ComboBoxUtils.FillComboBox_WithEnum<T>(cmb);
+        }
+
+        public static void BindIf<T>(this ComboBox cmb, IEnumerable<T> enumerable, Func<T, bool> ifFunc, Func<T, string> bindFunc)
+        {
+            ComboBoxUtils.BindIf(cmb, enumerable, ifFunc, bindFunc);
+        }
+
+        public static void SetSelectedIndex<T>(this ComboBox cmb, T value, Func<T, string> bindFunc)
+        {
+            ComboBoxUtils.SetSelectedIndex(cmb, value, bindFunc);
+        }
+    }
+
+    public static class ListBoxExtensions
+    {
+        public static void BindData<T>(this ListBox lb, IEnumerable<T> enumerable, Func<T, string> bindFunc)
+        {
+            lb.Items.Clear();
+            foreach (var item in enumerable)
+            {
+                lb.Items.Add(bindFunc(item));
+            }
+            if (lb.Items.Count > 0) lb.SelectedIndex = 0;
         }
     }
 
