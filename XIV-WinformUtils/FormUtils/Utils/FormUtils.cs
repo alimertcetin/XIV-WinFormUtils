@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -16,8 +17,17 @@ namespace XIV.Utils
         public static void CloseAllBut<T>() where T : Form
         {
             Type type = typeof(T);
-            foreach (Form form in Application.OpenForms)
+            var openForms = Application.OpenForms;
+            int formCount = openForms.Count;
+            var arr = ArrayPool<Form>.Shared.Rent(formCount);
+            for (int i = 0; i < formCount; i++)
             {
+                arr[i] = openForms[i];
+            }
+
+            for (int i = 0; i < formCount; i++)
+            {
+                Form form = arr[i];
                 if (form.GetType() != type)
                 {
                     form.Close();
@@ -28,6 +38,8 @@ namespace XIV.Utils
                     form.Activate();
                 }
             }
+
+            ArrayPool<Form>.Shared.Return(arr, clearArray: true);
         }
 
         /// <summary>
@@ -36,13 +48,19 @@ namespace XIV.Utils
         public static void CloseAllInstance<T>() where T : Form
         {
             Type type = typeof(T);
-            foreach (Form item in Application.OpenForms)
+            var openForms = Application.OpenForms;
+            int formCount = openForms.Count;
+            var arr = ArrayPool<Form>.Shared.Rent(formCount);
+            for (int i = 0; i < formCount; i++)
             {
-                if(item.GetType() != type)
-                {
-                    item.Close();
-                }
+                arr[i] = openForms[i];
             }
+            for (int i = 0; i < formCount; i++)
+            {
+                Form form = arr[i];
+                if (form.GetType() == type) form.Close();
+            }
+            ArrayPool<Form>.Shared.Return(arr, clearArray: true);
         }
 
         /// <summary>
