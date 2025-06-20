@@ -11,6 +11,23 @@ namespace XIV.Utils
     /// </summary>
     public static class FormUtils
     {
+        public static void CloseAll()
+        {
+            var openForms = Application.OpenForms;
+            int formCount = openForms.Count;
+            var arr = ArrayPool<Form>.Shared.Rent(formCount);
+            for (int i = 0; i < formCount; i++)
+            {
+                arr[i] = openForms[i];
+            }
+            for (int i = 0; i < formCount; i++)
+            {
+                arr[i].Close();
+            }
+
+            ArrayPool<Form>.Shared.Return(arr, clearArray: true);
+        }
+
         /// <summary>
         /// Close all forms but keep the ones that has same type with <typeparamref name="T"/>
         /// </summary>
