@@ -42,7 +42,7 @@ namespace PyramidReservationTool.XIV_WinFormUtils.XIV_WinformUtils.XIVControls
             set
             {
                 colorBorder = value;
-                this.Invalidate();
+                UpdateColors();
             }
         }
 
@@ -53,7 +53,7 @@ namespace PyramidReservationTool.XIV_WinFormUtils.XIV_WinformUtils.XIVControls
             set
             {
                 colorBorderFocus = value;
-                this.Invalidate();
+                UpdateColors();
             }
         }
 
@@ -64,7 +64,7 @@ namespace PyramidReservationTool.XIV_WinFormUtils.XIV_WinformUtils.XIVControls
             set
             {
                 colorBorderHover = value;
-                this.Invalidate();
+                UpdateColors();
             }
         }
 
@@ -75,7 +75,7 @@ namespace PyramidReservationTool.XIV_WinFormUtils.XIV_WinformUtils.XIVControls
             set
             {
                 colorBorderDisabled = value;
-                this.Invalidate();
+                UpdateColors();
             }
         }
 
@@ -86,8 +86,7 @@ namespace PyramidReservationTool.XIV_WinFormUtils.XIV_WinformUtils.XIVControls
             set
             {
                 colorText = value;
-                txt.ForeColor = value;
-                this.Invalidate();
+                UpdateColors();
             }
         }
 
@@ -98,7 +97,7 @@ namespace PyramidReservationTool.XIV_WinFormUtils.XIV_WinformUtils.XIVControls
             set
             {
                 colorTextDisabled = value;
-                this.Invalidate();
+                UpdateColors();
             }
         }
 
@@ -109,7 +108,7 @@ namespace PyramidReservationTool.XIV_WinFormUtils.XIV_WinformUtils.XIVControls
             set
             {
                 colorBackground = value;
-                this.Invalidate();
+                UpdateColors();
             }
         }
 
@@ -120,7 +119,7 @@ namespace PyramidReservationTool.XIV_WinFormUtils.XIV_WinformUtils.XIVControls
             set
             {
                 colorBackgroundDisabled = value;
-                this.Invalidate();
+                UpdateColors();
             }
         }
 
@@ -131,7 +130,7 @@ namespace PyramidReservationTool.XIV_WinFormUtils.XIV_WinformUtils.XIVControls
             set
             {
                 colorBackgroundHover = value;
-                this.Invalidate();
+                UpdateColors();
             }
         }
 
@@ -142,7 +141,7 @@ namespace PyramidReservationTool.XIV_WinFormUtils.XIV_WinformUtils.XIVControls
             set
             {
                 colorBackgroundFocus = value;
-                this.Invalidate();
+                UpdateColors();
             }
         }
 
@@ -261,16 +260,14 @@ namespace PyramidReservationTool.XIV_WinFormUtils.XIV_WinformUtils.XIVControls
 
         private void InitializeTextBox()
         {
-            this.BackColor = colorBackground;
-            txt.BackColor = colorBackground;
-            txt.ForeColor = colorText;
-            this.Invalidate();
+            UpdateColors();
+            OnCreateControl(); // SetBoundsCore gets called before OnCreateControl
         }
 
         protected override void OnCreateControl()
         {
             base.OnCreateControl();
-            if (txt.Multiline == false)
+            if (!DesignMode && txt.Multiline == false)
             {
                 // Calculate and store the fixed height for single-line mode
                 int txtHeight = TextRenderer.MeasureText("Text", this.Font).Height + 2;
@@ -281,7 +278,7 @@ namespace PyramidReservationTool.XIV_WinFormUtils.XIV_WinformUtils.XIVControls
 
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
-            if (txt.Multiline == false && singleLineHeight > 0)
+            if (!DesignMode && txt.Multiline == false && singleLineHeight > 0)
             {
                 // Always use the fixed height for single-line mode
                 base.SetBoundsCore(x, y, width, singleLineHeight, specified);
@@ -325,19 +322,27 @@ namespace PyramidReservationTool.XIV_WinFormUtils.XIV_WinformUtils.XIVControls
         protected override void OnEnabledChanged(EventArgs e)
         {
             base.OnEnabledChanged(e);
-            if (this.Enabled == false)
-            {
-                this.BackColor = colorBackgroundDisabled;
-                txt.BackColor = colorBackgroundDisabled;
-                txt.ForeColor = colorTextDisabled;
-            }
-            else
-            {
-                this.BackColor = colorBackground;
-                txt.BackColor = colorBackground;
-                txt.ForeColor = colorText;
-            }
+            UpdateColors();
+        }
+
+        private void UpdateColors()
+        {
+            // Always set all color properties, not just those for the current state
+            txt.ForeColor = this.Enabled ? colorText : colorTextDisabled;
+            txt.BackColor = this.Enabled
+                ? (isHovered ? colorBackgroundHover : (txt.Focused ? colorBackgroundFocus : colorBackground))
+                : colorBackgroundDisabled;
+
+            this.BackColor = txt.BackColor;
+
+            // Optionally, you can also force border redraw by invalidating
             this.Invalidate();
+        }
+
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            base.OnHandleCreated(e);
+            UpdateColors();
         }
 
         protected override void OnPaint(PaintEventArgs e)
