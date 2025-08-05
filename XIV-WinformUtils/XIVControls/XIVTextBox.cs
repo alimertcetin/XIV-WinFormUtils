@@ -230,6 +230,18 @@ namespace PyramidReservationTool.XIV_WinFormUtils.XIV_WinformUtils.XIVControls
             }
         }
 
+
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        public ScrollBars ScrollBars
+        {
+            get => txt.ScrollBars;
+            set
+            {
+                txt.ScrollBars = value;
+                this.Invalidate();
+            }
+        }
+
         public override Size MinimumSize
         {
             get
