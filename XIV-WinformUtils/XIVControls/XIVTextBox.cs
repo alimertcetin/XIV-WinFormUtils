@@ -377,7 +377,7 @@ namespace PyramidReservationTool.XIV_WinFormUtils.XIV_WinformUtils.XIVControls
 
         private void AlignTextBox()
         {
-            if (txt.Multiline)
+            if (IsMultiline)
             {
                 txt.Location = new Point(this.Padding.Left + sizeBorder, this.Padding.Top + sizeBorder);
                 txt.Size = new Size(
