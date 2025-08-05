@@ -211,6 +211,16 @@ namespace PyramidReservationTool.XIV_WinFormUtils.XIV_WinformUtils.XIVControls
         }
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        public new string Text
+        {
+            get => txt.Text;
+            set
+            {
+                txt.Text = value;
+            }
+        }
+
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public string PlaceholderText
         {
             get => txt.PlaceholderText;
