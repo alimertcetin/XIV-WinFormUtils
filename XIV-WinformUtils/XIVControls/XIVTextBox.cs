@@ -242,16 +242,13 @@ namespace PyramidReservationTool.XIV_WinFormUtils.XIV_WinformUtils.XIVControls
             set => base.MaximumSize = value;
         }
 
-        public new event EventHandler TextChanged
-        {
-            add => txt.TextChanged += value;
-            remove => txt.TextChanged -= value;
-        }
+        public new event EventHandler TextChanged;
 
         public XIVTextBox()
         {
             InitializeComponent();
             InitializeTextBox();
+            txt.TextChanged += Txt_TextChanged;
             txt.GotFocus += Txt_GotFocus;
             txt.LostFocus += Txt_LostFocus;
             txt.MouseHover += Txt_MouseHover;
@@ -287,6 +284,11 @@ namespace PyramidReservationTool.XIV_WinFormUtils.XIV_WinformUtils.XIVControls
             {
                 base.SetBoundsCore(x, y, width, height, specified);
             }
+        }
+
+        private void Txt_TextChanged(object sender, EventArgs e)
+        {
+            this.TextChanged?.Invoke(this, e);
         }
 
         private void Txt_GotFocus(object sender, EventArgs e)
