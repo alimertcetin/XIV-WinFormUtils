@@ -230,6 +230,16 @@ namespace PyramidReservationTool.XIV_WinFormUtils.XIV_WinformUtils.XIVControls
             }
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        public bool UseSystemPasswordChar
+        {
+            get => txt.UseSystemPasswordChar;
+            set
+            {
+                txt.UseSystemPasswordChar = value;
+                this.Invalidate();
+            }
+        }
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public ScrollBars ScrollBars
