@@ -275,11 +275,13 @@ namespace PyramidReservationTool.XIV_WinFormUtils.XIV_WinformUtils.XIVControls
         }
 
         public new event EventHandler TextChanged;
+        public new event EventHandler KeyDown;
 
         public XIVTextBox()
         {
             InitializeComponent();
             InitializeTextBox();
+            txt.KeyDown += Txt_KeyDown;
             txt.TextChanged += Txt_TextChanged;
             txt.GotFocus += Txt_GotFocus;
             txt.LostFocus += Txt_LostFocus;
@@ -316,6 +318,11 @@ namespace PyramidReservationTool.XIV_WinFormUtils.XIV_WinformUtils.XIVControls
             {
                 base.SetBoundsCore(x, y, width, height, specified);
             }
+        }
+
+        private void Txt_KeyDown(object sender, KeyEventArgs e)
+        {
+            this.KeyDown?.Invoke(this, e);
         }
 
         private void Txt_TextChanged(object sender, EventArgs e)
